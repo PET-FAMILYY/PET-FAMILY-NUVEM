@@ -15,7 +15,7 @@ Arquivo: [`OpenApiConfig.java`](../../src/main/java/br/com/fiap/petfamily/config
 .version("1.1.0-sprint4")
 ```
 
-- **Antes** (mostrar na aplicação publicada): `https://<webapp>.azurewebsites.net/swagger-ui.html` exibe a badge `1.0.0`;
+- **Antes** (mostrar na aplicação publicada): `https://<webapp>.azurewebsites.net/swagger-ui/index.html` exibe a badge `1.0.0`;
   `curl https://<webapp>.azurewebsites.net/api-docs | jq .info.version` → `"1.0.0"`.
 - **Depois** do deploy: a badge e o `info.version` passam a `1.1.0-sprint4`, e `/actuator/info` mostra o novo
   `build.buildId` (número do build do Azure DevOps). Alteração pequena, visível e sem risco para os testes.

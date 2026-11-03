@@ -28,7 +28,5 @@ docs/sprint4/pdf/*.pdf
 !.env.example
 infra/azure/*.local*
 
-# Material de aula do professor (nao publicar)
-Modulo_19_Azure_Pipeline/
 
 # teste de disparo automatico do CI (Sprint 4)

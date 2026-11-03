@@ -23,7 +23,7 @@
 
   <rect width="1600" height="1010" fill="#ffffff"/>
   <text x="20" y="34" font-size="24" font-weight="700" fill="#0f172a">Pet Family API — Arquitetura de implantação e fluxo CI/CD (Sprint 4)</text>
-  <text x="20" y="56" font-size="13" fill="#475569">Laranja = caminho de ENTREGA do software (numerado 1–10) · Azul = caminho de USO da aplicação · Borda tracejada = ainda NÃO criado/validado (Azure DevOps) · Borda sólida = existe no Azure e foi testado</text>
+  <text x="20" y="56" font-size="13" fill="#475569">Laranja = caminho de ENTREGA do software (numerado 1–10) · Azul = caminho de USO da aplicação · Todos os componentes foram criados e validados em execução real (pipeline 20261103.3)</text>
 
   <!-- ===== Zona: Desenvolvimento ===== -->
   <rect class="zone" x="20" y="80" width="260" height="330" rx="12"/>
@@ -55,11 +55,11 @@
   <text class="ts" x="455" y="358" text-anchor="middle">a cada push na master</text>
 
   <!-- ===== Zona: Azure DevOps ===== -->
-  <rect class="zone" x="630" y="80" width="950" height="470" rx="12" style="stroke-dasharray:9 5"/>
-  <text class="zt" x="646" y="106">Azure DevOps — projeto "Sprint 4 – Azure DevOps" (Private · Git · Agile) — ainda não criado</text>
+  <rect class="zone" x="630" y="80" width="950" height="470" rx="12"/>
+  <text class="zt" x="646" y="106">Azure DevOps — projeto "Sprint 4 – Azure DevOps" (Private · Git · Agile)</text>
 
   <!-- CI -->
-  <rect class="pend" x="650" y="124" width="380" height="412" rx="10"/>
+  <rect class="box" style="stroke-width:2.5" x="650" y="124" width="380" height="412" rx="10"/>
   <text class="tb" x="668" y="150">ESTÁGIO CI — Build e testes</text>
   <rect class="tag" x="880" y="134" width="130" height="20" rx="10"/>
   <text class="tagt" x="945" y="148" text-anchor="middle">Azure Pipelines</text>
@@ -74,12 +74,12 @@
   <text class="ts" x="688" y="373">artefato do pipeline "petfamily-jar"</text>
   <rect class="tag" x="668" y="400" width="170" height="20" rx="10"/><text class="tagt" x="753" y="414" text-anchor="middle">Maven 3.9 · JDK 17</text>
   <rect class="tag" x="846" y="400" width="164" height="20" rx="10"/><text class="tagt" x="928" y="414" text-anchor="middle">JUnit 5 · Testcontainers</text>
-  <text class="ts" x="668" y="452">Agente: ubuntu-latest (Microsoft-hosted ou self-hosted)</text>
+  <text class="ts" x="668" y="452">Agente: ubuntu-latest (Microsoft-hosted, 1 job gratuito)</text>
   <text class="ts" x="668" y="470">Trigger: push em master (e main), sem filtro de paths</text>
-  <text class="ts" x="668" y="488">⚠ requer paralelismo gratuito concedido ou agente próprio</text>
+  <text class="ts" x="668" y="488">Gatilho: GitHub App do Azure Pipelines</text>
 
   <!-- Artefatos -->
-  <rect class="pend" x="1060" y="124" width="170" height="250" rx="10"/>
+  <rect class="box" style="stroke-width:2.5" x="1060" y="124" width="170" height="250" rx="10"/>
   <text class="tb" x="1145" y="150" text-anchor="middle">Artefato</text>
   <text class="ts" x="1145" y="168" text-anchor="middle">(Azure Pipelines Artifacts)</text>
   <rect class="box" x="1076" y="186" width="138" height="116" rx="8"/>
@@ -92,7 +92,7 @@
   <text class="ts" x="1145" y="350" text-anchor="middle">imagem Docker no deploy</text>
 
   <!-- CD -->
-  <rect class="pend" x="1260" y="124" width="300" height="292" rx="10"/>
+  <rect class="box" style="stroke-width:2.5" x="1260" y="124" width="300" height="292" rx="10"/>
   <text class="tb" x="1278" y="150">ESTÁGIO CD</text>
   <rect class="tag" x="1424" y="134" width="124" height="20" rx="10"/>
   <text class="tagt" x="1486" y="148" text-anchor="middle">Azure Pipelines</text>
@@ -108,7 +108,7 @@
   <rect class="tag" x="1278" y="382" width="150" height="20" rx="10"/><text class="tagt" x="1353" y="396" text-anchor="middle">AzureWebApp@1</text>
 
   <!-- Service connection -->
-  <rect class="pend" x="1260" y="440" width="300" height="96" rx="10"/>
+  <rect class="box" style="stroke-width:2.5" x="1260" y="440" width="300" height="96" rx="10"/>
   <text class="tb" x="1278" y="466">Service Connection (ARM)</text>
   <text class="ts" x="1278" y="486">"sc-azure-sprint4" · escopo: Resource Group</text>
   <text class="ts" x="1278" y="504">credencial gerida pelo Azure DevOps</text>
@@ -117,7 +117,7 @@
   <!-- ===== Zona: Microsoft Azure ===== -->
   <rect class="zone" x="630" y="590" width="950" height="395" rx="12"/>
   <text class="zt" x="646" y="616">Microsoft Azure — Resource Group rg-petfamily-sprint4</text>
-  <text class="ts" x="1568" y="616" text-anchor="end">provisionado · deploy de teste manual feito</text>
+  <text class="ts" x="1568" y="616" text-anchor="end">provisionado e em uso pelo pipeline</text>
 
   <rect class="box" x="650" y="634" width="560" height="334" rx="10" style="stroke-width:2.5"/>
   <text class="tb" x="668" y="660">Azure App Service (Linux, plano B1) — Web App "petfamily-sprint4-api"</text>
@@ -156,7 +156,7 @@
   <text class="ts" x="110" y="783" text-anchor="middle">(tutor / veterinário)</text>
   <rect class="box" x="250" y="650" width="310" height="62" rx="8"/>
   <text class="tb" x="405" y="674" text-anchor="middle">Navegador · Swagger UI</text>
-  <text class="ts" x="405" y="694" text-anchor="middle">/swagger-ui.html no endereço do Web App</text>
+  <text class="ts" x="405" y="694" text-anchor="middle">/swagger-ui/index.html no endereço do Web App</text>
   <rect class="box" x="250" y="730" width="310" height="62" rx="8"/>
   <text class="tb" x="405" y="754" text-anchor="middle">Postman / curl / app mobile (Expo)</text>
   <text class="ts" x="405" y="774" text-anchor="middle">CRUD via API REST + token Bearer</text>

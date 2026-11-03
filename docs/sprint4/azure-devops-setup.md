@@ -115,7 +115,7 @@ escopo: **Resource Group `rg-petfamily-sprint4`** → nome **`sc-azure-sprint4`*
 2. Estágio **CI**: aba *Tests* com os resultados; aba *Artifacts* com `petfamily-jar` (`app.jar`, `build-info.txt`).
 3. Estágio **CD** inicia sozinho; o passo *Smoke test* confirma `/actuator/health` = 200 e que `/actuator/info` mostra
    `build.buildId` igual ao `Build.BuildNumber` da execução.
-4. Abra `https://<webapp>.azurewebsites.net/swagger-ui.html` e rode `docs/sprint4/crud-demo.ps1`.
+4. Abra `https://<webapp>.azurewebsites.net/swagger-ui/index.html` e rode `docs/sprint4/crud-demo.ps1`.
 
 ## 8. Riscos conhecidos de configuração
 

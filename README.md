@@ -1,19 +1,21 @@
 # Pet Family API
 
 > Backend RESTful para acompanhamento contínuo da saúde dos pets
-> **Challenge CLYVO VET 2026 — FIAP | Java Advanced — Entrega 3**
+> **Challenge CLYVO VET 2026 — FIAP | Java Advanced (Entrega 3) · DevOps Tools & Cloud Computing (Sprint 4)**
 
-🎥 **Vídeo de apresentação:** [https://youtu.be/YUA4fIXr-tg](https://youtu.be/YUA4fIXr-tg)
+## Links da entrega
 
----
-  
-🌐 **API online (deploy):** [https://petfamily-api.onrender.com](https://petfamily-api.onrender.com)                         
-❤️ **Health check:** [https://petfamily-api.onrender.com/actuator/health](https://petfamily-api.onrender.com/actuator/health)  
-📖 **Swagger:** [https://petfamily-api.onrender.com/swagger-ui.html](https://petfamily-api.onrender.com/swagger-ui.html)
-
-> ⏱️ A API roda no plano gratuito do Render e "dorme" após ~15 min sem uso. A primeira requisição depois disso pode levar até 1–2 minutos (cold start).
-
-📱 **Repositório do app mobile:** [https://github.com/PET-FAMILYY/PET-FAMILY-MOBILE](https://github.com/PET-FAMILYY/PET-FAMILY-MOBILE)
+| Item | Link |
+|---|---|
+| Repositório GitHub | [PET-FAMILYY/PET-FAMILY-NUVEM](https://github.com/PET-FAMILYY/PET-FAMILY-NUVEM) (branch `master`) |
+| Projeto Azure DevOps | [Sprint 4 – Azure DevOps](https://dev.azure.com/petfamily-sprint4/Sprint%204%20%E2%80%93%20Azure%20DevOps) |
+| Pipelines (CI/CD) | [Execuções](https://dev.azure.com/petfamily-sprint4/Sprint%204%20%E2%80%93%20Azure%20DevOps/_build) |
+| Aplicação no Azure Web App | https://petfamily-sprint4-api.azurewebsites.net |
+| Health check | https://petfamily-sprint4-api.azurewebsites.net/actuator/health |
+| Versão publicada (`buildId`) | https://petfamily-sprint4-api.azurewebsites.net/actuator/info |
+| Swagger | https://petfamily-sprint4-api.azurewebsites.net/swagger-ui/index.html |
+| Vídeo (YouTube) | **pendente**, será incluído após a gravação |
+| App mobile | [PET-FAMILY-MOBILE](https://github.com/PET-FAMILYY/PET-FAMILY-MOBILE) |
 
 ---
 
@@ -23,7 +25,7 @@ Ciclo demonstrado: **alteração no código → push na `master` → CI automát
 
 ![Arquitetura e CI/CD](docs/sprint4/arquitetura-cicd.png)
 
-Fonte editável: [`docs/sprint4/arquitetura-cicd.svg`](docs/sprint4/arquitetura-cicd.svg) (SVG puro, abre no draw.io/Inkscape/navegador). Borda sólida = existe no Azure; tracejada = Azure DevOps, **ainda não criado**.
+Fonte editável: [`docs/sprint4/arquitetura-cicd.svg`](docs/sprint4/arquitetura-cicd.svg) (SVG puro, abre no draw.io/Inkscape/navegador). Laranja = caminho de entrega (etapas 1–10); azul = caminho de uso da aplicação.
 
 | Item | Decisão |
 |---|---|
@@ -46,21 +48,23 @@ Fonte editável: [`docs/sprint4/arquitetura-cicd.svg`](docs/sprint4/arquitetura-
 
 **Testes (local e CI):** `mvn verify` — 28 testes (23 de fluxos de negócio, 3 de CRUD/persistência de pets com SELECT direto na tabela, 1 contexto, 1 migrations V1–V7 em PostgreSQL real via Testcontainers; este último só roda com Docker, ou seja, no agente `ubuntu-latest` do CI).
 
-**Execução local:** `mvn spring-boot:run` (H2, `http://localhost:9090/swagger-ui.html`) ou Docker Compose com PostgreSQL (seção "Como Rodar"). Variáveis do perfil `prod`: `DB_URL` (ou `DB_HOST`/`DB_PORT`/`DB_NAME`), `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ALLOWED_ORIGINS`, `SWAGGER_ENABLED`.
+**Execução local:** `mvn spring-boot:run` (H2, `http://localhost:9090/swagger-ui/index.html`) ou Docker Compose com PostgreSQL (seção "Como Rodar"). Variáveis do perfil `prod`: `DB_URL` (ou `DB_HOST`/`DB_PORT`/`DB_NAME`), `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ALLOWED_ORIGINS`, `SWAGGER_ENABLED`.
 
 ### Status e pendências reais (Sprint 4)
 
 | Item | Status |
 |---|---|
-| Build, 28 testes (27 passam, 1 ignorado sem Docker) e JAR com `build-info` | Verificado localmente |
-| CRUD de pets ponta a ponta (H2 local, porta 9191) | Verificado localmente |
-| Azure: Resource Group `rg-petfamily-sprint4`, PostgreSQL Flexible Server `petfamily-sprint4-pg` (banco `petfamily`), plano Linux B1, Web App `petfamily-sprint4-api` | **Criados** via `infra/azure/provision.ps1` (assinatura RM565139, região `brazilsouth`) |
-| Deploy **manual** de teste do JAR no Web App (`az webapp deploy`, fora do pipeline) | Verificado: `/actuator/health` = UP, Flyway V1–V7 aplicado no PostgreSQL do Azure |
-| CRUD de pets na API publicada + SELECT direto no PostgreSQL do Azure (registros `DEMO`) | Verificado: inserção, leitura, atualização, exclusão (0 linhas) e limpeza |
-| `azure-pipelines.yml` | YAML sintaticamente válido; **nunca executado no Azure DevOps** (o deploy acima foi manual, não é CI/CD) |
-| Projeto Azure DevOps, convite/acesso Basic do professor, Service Connection | **Não criados** (faltam nome da organização, nome/e-mail do professor e turmas) |
-| Repositório GitHub com este código | A pasta local **não é um repositório Git próprio**; o código ainda precisa ser publicado no GitHub escolhido |
-| Link do vídeo no YouTube e PDF final | **Pendentes** (vídeo ainda não gravado) |
+| Build, testes (28; 27 executam e 1 depende de Docker) e JAR com `build-info` | Verificado localmente e no CI |
+| Azure: Resource Group `rg-petfamily-sprint4`, PostgreSQL Flexible Server `petfamily-sprint4-pg` (banco `petfamily`), plano Linux B1, Web App `petfamily-sprint4-api` (região `brazilsouth`) | Criados via `infra/azure/provision.ps1` |
+| Flyway V1–V7 no PostgreSQL do Azure e `/actuator/health` = UP | Verificado |
+| CRUD de pets na API publicada, com SELECT direto no PostgreSQL do Azure (registros `DEMO`) | Verificado: inserção, leitura, atualização, exclusão (0 linhas) e limpeza |
+| Organização `petfamily-sprint4` e projeto "Sprint 4 – Azure DevOps" (privado, Git, Agile) | Criados |
+| Service Connection `sc-azure-sprint4` (Azure Resource Manager) | Criada |
+| Repositório GitHub `PET-FAMILYY/PET-FAMILY-NUVEM`, branch `master` | Publicado |
+| Pipeline: execução manual `20261103.1` e execuções disparadas por push na `master` (CI → artefato `petfamily-jar` → CD → deploy → smoke test) | Verificado: a `20261103.3` passou nos dois estágios e o app publicado mostra o `buildId` dessa execução. A `20261103.2` falhou no smoke test (corrida logo após o deploy), corrigido |
+| Convite do professor com acesso **Basic** e permissão de leitura no projeto | **Pendente** (falta nome e e-mail do professor) |
+| Descrição do projeto com o nome do professor e as turmas dos integrantes | **Pendente** (falta nome do professor e turmas) |
+| Vídeo no YouTube e PDF final | **Pendentes** |
 
 ---
 
@@ -76,7 +80,7 @@ Fonte editável: [`docs/sprint4/arquitetura-cicd.svg`](docs/sprint4/arquitetura-
 8. [Fluxos de negócio (além do CRUD)](#fluxos-de-negócio-além-do-crud)
 9. [Endpoints](#endpoints)
 10. [Como Rodar](#como-rodar)
-11. [Deploy online (Render)](#deploy-online-render)
+11. [Deploy alternativo (Render)](#deploy-alternativo-render)
 12. [Contas de demonstração (perfil `dev`)](#contas-de-demonstração-perfil-dev)
 13. [Exemplos de Payload](#exemplos-de-payload)
 14. [Correspondência requisitos × implementação](#correspondência-requisitos--implementação)
@@ -104,7 +108,7 @@ A Pet Family API centraliza e gerencia todas as informações relacionadas à sa
 - **Linha do tempo do pet** — histórico de saúde unificado (consultas + cuidados preventivos + conversas com a IA) em uma única lista cronológica
 - **Aviso diário de cuidados** — rotina agendada que identifica cuidados pendentes que vencem em até 3 dias
 - **Proteção contra força bruta no login** — após 5 falhas seguidas o acesso é bloqueado temporariamente (HTTP 429)
-- **PostgreSQL em produção**, Docker, CI no GitHub Actions e deploy online no Render
+- **PostgreSQL em produção**, Docker, CI/CD no Azure DevOps com deploy no Azure Web App (Sprint 4) e CI no GitHub Actions
 
 
 ---
@@ -187,7 +191,7 @@ Get-Content .env.oracle | ForEach-Object {
 mvn spring-boot:run
 ```
 
-Sinais de que deu certo no log: `HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection` e `Started PetFamilyApplication`. A API fica em **http://localhost:9090** e o Swagger em **http://localhost:9090/swagger-ui.html**.
+Sinais de que deu certo no log: `HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection` e `Started PetFamilyApplication`. A API fica em **http://localhost:9090** e o Swagger em **http://localhost:9090/swagger-ui/index.html**.
 
 ### 4. Requisições de teste
 
@@ -309,7 +313,10 @@ SELECT * FROM auditoria_consultas_s4 ORDER BY id DESC;   -- INSERT/UPDATE regist
 | Docker / Docker Compose | — |
 | Testcontainers (teste de migrations no PostgreSQL) | — |
 | GitHub Actions (CI) | — |
-| Render (deploy) | — |
+| Azure DevOps Pipelines (CI/CD) | YAML (`azure-pipelines.yml`) |
+| Azure Web App (Linux, Java SE 17) | deploy da Sprint 4 |
+| Azure Database for PostgreSQL Flexible Server | 16 |
+| Render (deploy da entrega anterior) | — |
 | Spring Actuator (health check) | — |
 
 ---
@@ -358,13 +365,13 @@ Um `Usuario` com role `TUTOR` está sempre vinculado 1:1 a um `Tutor` (criado ju
 | `JWT_EXPIRATION_MS` | `86400000` (24h) | Validade do token. |
 | `CORS_ALLOWED_ORIGINS` | `*` | Lista separada por vírgula em produção. |
 | `SPRING_PROFILES_ACTIVE` | `dev` | Ver seção Flyway/dados de demonstração. Valores: `dev` (H2 + dados demo), `prod` (PostgreSQL), `prod,demo` (PostgreSQL + dados demo), `test`. |
-| `PORT` | `9090` | Porta HTTP. O Render injeta esse valor automaticamente. |
+| `PORT` | `9090` | Porta HTTP. O Render injeta esse valor; no Azure Web App a porta vem de `--server.port` no comando de inicialização. |
 | `DB_URL` | — | URL JDBC completa (opcional; tem prioridade sobre `DB_HOST`). |
 | `DB_HOST` / `DB_PORT` / `DB_NAME` | — / `5432` / — | Dados do PostgreSQL (perfil `prod`). |
 | `DB_USER` / `DB_PASSWORD` | — | Credenciais do PostgreSQL (perfil `prod`). |
 | `SWAGGER_ENABLED` | `false` em `prod` | Liga/desliga Swagger UI e `/api-docs` em produção. |
 
-> Em `prod`, `JWT_SECRET` é **obrigatório** (no Render é gerado automaticamente).
+> Em `prod`, `JWT_SECRET` é **obrigatório** (no Render é gerado automaticamente; no Azure é um App Setting do Web App).
 
 Exemplo (PowerShell, para rodar com segredo customizado):
 ```powershell
@@ -396,8 +403,9 @@ O schema é 100% gerenciado pelo Flyway (`src/main/resources/db/migration`). O H
 
 - **Desenvolvimento local:** H2 em **arquivo** (`./data/petfamily.mv.db`, ignorado pelo git) — os dados persistem entre reinicializações. `AUTO_SERVER=TRUE` permite abrir o H2 Console com a aplicação já rodando.
 - **Testes automatizados:** H2 em **memória**, isolado (`src/test/resources/application-test.properties`, perfil `test`) — cada execução de teste começa de um banco limpo, migrado do zero.
-- Não há conexão com banco externo/nuvem — isso é documentado aqui de propósito, para não passar a impressão de que existe algo além do H2 local. *(Válido para dev/testes; veja o item abaixo para produção.)*
-- **Produção (Render) e Docker Compose:** **PostgreSQL** (perfil `prod`), com o schema criado pelo Flyway na subida (V1–V7). O `h2-console` não existe em produção.
+- Em desenvolvimento e testes não há banco externo: só o H2 local/em memória.
+- **Banco em nuvem (Sprint 4):** **Azure Database for PostgreSQL – Flexible Server 16** (perfil `prod`, `DB_URL` com `sslmode=require`), com o schema criado pelo Flyway na subida (V1–V7). O firewall libera apenas os IPs de saída do Web App e o IP de quem consulta o banco.
+- **Docker Compose e Render:** também **PostgreSQL** (perfil `prod`). O `h2-console` não existe em produção.
 - **Teste de migrations em PostgreSQL real:** `PostgresMigrationTest` (Testcontainers) executa as 7 migrations; é ignorado automaticamente se não houver Docker e roda no CI.
 
 ### Dados de demonstração
@@ -548,7 +556,8 @@ Implementação: `LinhaDoTempoService` (somente leitura, `@Transactional(readOnl
 ### Infraestrutura
 | Método | Rota | Perfil | Descrição |
 |---|---|---|---|
-| GET | `/actuator/health` | público | Health check (usado pelo Render e pelo Docker) |
+| GET | `/actuator/health` | público | Health check (usado pelo Azure, Render e Docker) |
+| GET | `/actuator/info` | público | Versão e `buildId` publicados (usado pelo smoke test do CD) |
 
 ---
 
@@ -570,7 +579,7 @@ mvn test
 ```
 Inclui testes de contexto (Flyway + Security) e testes de integração de ponta a ponta (`FluxosDeNegocioIntegrationTest`) cobrindo login, isolamento entre tutores, agendamento/conflito/cancelamento/atendimento e conclusão/recorrência de cuidados — ver seção "Testes" abaixo.
 
-> Atualização: a suíte agora tem 25 testes — contexto, integração de ponta a ponta e o `PostgresMigrationTest` (Testcontainers, ignorado se não houver Docker).
+> A suíte tem 28 testes: contexto, integração de ponta a ponta, CRUD de pets com conferência por SELECT e o `PostgresMigrationTest` (Testcontainers, ignorado se não houver Docker; roda no agente do CI).
 
 ### Via Docker Compose (PostgreSQL, igual à produção)
 Pré-requisito: Docker.
@@ -580,15 +589,15 @@ docker compose up --build
 ```
 - API: http://localhost:9090
 - Health: http://localhost:9090/actuator/health → `{"status":"UP"}`
-- Swagger: http://localhost:9090/swagger-ui.html
+- Swagger: http://localhost:9090/swagger-ui/index.html
 
 Para apagar o banco local e recomeçar: `docker compose down -v`.
 
 ---
 
-## Deploy online (Render)
+## Deploy alternativo (Render)
 
-A aplicação está publicada em **https://petfamily-api.onrender.com**, com banco **PostgreSQL gerenciado** no Render.
+Configuração mantida da entrega anterior. O deploy avaliado na Sprint 4 é o **Azure Web App** (seção "Sprint 4" no topo). Este blueprint cria um banco **PostgreSQL gerenciado** e o serviço web no Render, e o ambiente pode estar desativado.
 
 | Item | Como foi feito |
 |---|---|
@@ -602,13 +611,12 @@ A aplicação está publicada em **https://petfamily-api.onrender.com**, com ban
 
 **Para republicar:** basta dar `git push` na branch `main`; o Render faz o build e o deploy automaticamente.
 
-**Teste rápido do ambiente online:**
+**Teste rápido do ambiente do Azure:**
 ```bash
-curl https://petfamily-api.onrender.com/actuator/health
-curl -X POST https://petfamily-api.onrender.com/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"veterinario@petfamily.com","senha":"senha123"}'
+curl https://petfamily-sprint4-api.azurewebsites.net/actuator/health
+curl https://petfamily-sprint4-api.azurewebsites.net/actuator/info
 ```
+No Azure o perfil é `prod` (sem dados de demonstração). Para testar o CRUD, registre um tutor em `POST /auth/registrar`, faça login em `POST /auth/login` e use o token Bearer em `/pets` (roteiro completo em [`docs/sprint4/roteiro-video.md`](docs/sprint4/roteiro-video.md)).
 
 ---
 
@@ -682,7 +690,7 @@ curl -X POST https://petfamily-api.onrender.com/auth/login \
 | Spring Security, 2 perfis, rotas protegidas (30 pts) | `security/*`, `@PreAuthorize` nos controllers + checagem de posse nos services |
 | Funcionalidades além de CRUD (20 pts) | Agendamento/atendimento de consultas; cuidado preventivo com recorrência |
 | Funcionalidades além de CRUD — adicionadas na entrega final | **Linha do tempo do pet**; aviso diário de cuidados; bloqueio de login por tentativas |
-| Deploy online | Render + PostgreSQL gerenciado (`render.yaml`, `Dockerfile`) — URL no topo deste README |
+| Deploy online | Azure Web App + Azure Database for PostgreSQL via Azure DevOps (`azure-pipelines.yml`, `infra/azure/`); Render na entrega anterior (`render.yaml`, `Dockerfile`) — URLs no topo deste README |
 | Flyway — atualização | 7 migrations (V1 por banco + V2–V7 comuns) |
 | Qualidade / integração contínua | GitHub Actions, testes de integração e Testcontainers |
 
@@ -780,12 +788,12 @@ Lista objetiva de toda alteração no código Java, para facilitar a correção.
 
 ## Integrantes
 
-| Nome | RM |
-|---|---|
-| Pedro Vaz Ferreira | 566551 |
-| João Victor Luiz Oliveira Resende | 565139 |
-| Vitor Dias dos Santos |  RM565422 |
-| Felipe Kirschner Modesto | RM561810 |
+| Nome | RM | Turma |
+|---|---|---|
+| Felipe Kirschner Modesto | RM561810 | 2TDSPG |
+| João Victor Luiz de Oliveira Resende | RM565139 | 2TDSPG |
+| Pedro Henrique Vaz Ferreira | RM566551 | 2TDSPG |
+| Vitor Dias dos Santos | RM565422 | 2TDSPG |
 
 ---
 
@@ -798,14 +806,16 @@ PET--FAMILY-JAVA-main/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── render.yaml
+├── azure-pipelines.yml            ← CI/CD do Azure DevOps
 ├── .env.example
 ├── .github/workflows/ci.yml
+├── infra/azure/                   ← scripts de provisionamento (Azure e Azure DevOps)
 ├── docs/
 │   ├── cronograma.md
 │   ├── arquitetura.md
 │   ├── endpoints.md
-│   └── postman_collection.json
-├── PET-FAMILY-MOBILE-main/        ← app Expo (ver README próprio)
+│   ├── postman_collection.json
+│   └── sprint4/                   ← diagrama, roteiro do vídeo, CRUD, SELECTs, gerador do PDF
 └── src/
     ├── main/
     │   ├── java/br/com/fiap/petfamily/
