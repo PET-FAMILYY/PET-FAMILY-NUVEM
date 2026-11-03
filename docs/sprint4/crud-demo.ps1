@@ -23,25 +23,29 @@ $reg = Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/registrar" -ContentTyp
 $h = @{ Authorization = "Bearer $($reg.token)" }
 Write-Host "tutorId=$($reg.tutorId)  email=$email"
 
-Passo '1. CREATE  POST /pets' 'Agora rode no banco: SELECT 1 (deve aparecer 1 linha DEMO-Sprint4-Rex)'
+Passo '1. CREATE  POST /pets' 'Rode no psql o SELECT dos pets DEMO (deve aparecer 1 linha: DEMO-Sprint4-Rex)'
 $pet = Invoke-RestMethod -Method Post -Uri "$BaseUrl/pets" -Headers $h -ContentType 'application/json' `
   -Body (@{ nome = 'DEMO-Sprint4-Rex'; especie = 'Cachorro'; raca = 'SRD'; idade = 3; peso = 12.5 } | ConvertTo-Json)
 Mostra $pet
 $id = $pet.id
 Espera
 
-Passo "2. READ  GET /pets/$id  e  GET /pets" 'Compare os campos com o SELECT 2 no banco'
+Passo "2. READ  GET /pets/$id  e  GET /pets" 'Rode no psql o mesmo SELECT e compare com os dados acima'
+Write-Host "`n--- Consulta 1: um pet pelo id (GET /pets/$id) ---" -ForegroundColor White
 Mostra (Invoke-RestMethod -Uri "$BaseUrl/pets/$id" -Headers $h)
-Mostra (Invoke-RestMethod -Uri "$BaseUrl/pets?size=5" -Headers $h).content
+Write-Host "`n--- Consulta 2: lista de pets do tutor (GET /pets) ---" -ForegroundColor White
+$lista = (Invoke-RestMethod -Uri "$BaseUrl/pets?size=5" -Headers $h).content
+$lista | Format-Table id, nome, especie, raca, idade, peso -AutoSize | Out-String | Write-Host
+Write-Host "Total de pets na lista: $(@($lista).Count)"
 Espera
 
-Passo "3. UPDATE  PUT /pets/$id" 'Rode SELECT 3: nome ...-Atualizado, raca Labrador, idade 4, peso 14'
+Passo "3. UPDATE  PUT /pets/$id" 'Rode no psql o mesmo SELECT: nome ...-Atualizado, raca Labrador, idade 4, peso 14'
 $upd = Invoke-RestMethod -Method Put -Uri "$BaseUrl/pets/$id" -Headers $h -ContentType 'application/json' `
   -Body (@{ nome = 'DEMO-Sprint4-Rex-Atualizado'; especie = 'Cachorro'; raca = 'Labrador'; idade = 4; peso = 14.0 } | ConvertTo-Json)
 Mostra $upd
 Espera
 
-Passo "4. DELETE  DELETE /pets/$id" 'Rode SELECT 4: deve retornar 0 linhas'
+Passo "4. DELETE  DELETE /pets/$id" 'Rode no psql o COUNT dos pets DEMO: deve retornar 0'
 Invoke-WebRequest -Method Delete -Uri "$BaseUrl/pets/$id" -Headers $h -UseBasicParsing | Select-Object StatusCode | Format-List
 try {
   Invoke-RestMethod -Uri "$BaseUrl/pets/$id" -Headers $h | Out-Null
@@ -52,7 +56,7 @@ try {
 Espera
 
 if (-not $ManterTutor) {
-  Passo "5. Limpeza  DELETE /tutores/$($reg.tutorId)" 'Remove o tutor e o usuário de demonstração (SELECT 5 deve retornar 0 linhas)'
+  Passo "5. Limpeza  DELETE /tutores/$($reg.tutorId)" 'Remove o tutor e o usuário de demonstração (rode os 2 COUNT: tutores_demo e usuarios_demo = 0)'
   Invoke-WebRequest -Method Delete -Uri "$BaseUrl/tutores/$($reg.tutorId)" -Headers $h -UseBasicParsing |
     Select-Object StatusCode | Format-List
 }
