@@ -66,14 +66,14 @@
   <text class="t" x="668" y="184">4  Checkout + JDK 17 + cache Maven</text>
   <text class="ts" x="688" y="201">Maven@4 restaura dependências</text>
   <text class="t" x="668" y="236">5  mvn verify: compila e roda os testes</text>
-  <text class="ts" x="688" y="253">JUnit + MockMvc (H2) · Testcontainers (PostgreSQL)</text>
+  <text class="ts" x="688" y="253">JUnit + MockMvc (H2) · migrations validadas no PostgreSQL do Azure</text>
   <text class="ts" x="688" y="269">falhou? → CD não executa</text>
   <text class="t" x="668" y="304">6  Publica resultados dos testes (aba Tests)</text>
   <text class="ts" x="688" y="321">Surefire XML → JUnit no Azure DevOps</text>
   <text class="t" x="668" y="356">7  Gera app.jar (+ build-info.txt) e publica</text>
   <text class="ts" x="688" y="373">artefato do pipeline "petfamily-jar"</text>
   <rect class="tag" x="668" y="400" width="170" height="20" rx="10"/><text class="tagt" x="753" y="414" text-anchor="middle">Maven 3.9 · JDK 17</text>
-  <rect class="tag" x="846" y="400" width="164" height="20" rx="10"/><text class="tagt" x="928" y="414" text-anchor="middle">JUnit 5 · Testcontainers</text>
+  <rect class="tag" x="846" y="400" width="164" height="20" rx="10"/><text class="tagt" x="928" y="414" text-anchor="middle">JUnit 5 · MockMvc</text>
   <text class="ts" x="668" y="452">Agente: ubuntu-latest (Microsoft-hosted, 1 job gratuito)</text>
   <text class="ts" x="668" y="470">Trigger: push em master (e main), sem filtro de paths</text>
   <text class="ts" x="668" y="488">Gatilho: GitHub App do Azure Pipelines</text>

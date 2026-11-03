@@ -40,7 +40,7 @@ Arquivo: [`OpenApiConfig.java`](../../src/main/java/br/com/fiap/petfamily/config
 | 3 | 4:00 | Na aplicação publicada, mostrar o **antes** (Swagger com `1.0.0`; `/actuator/info` com o buildId atual). Na IDE, editar `OpenApiConfig.java` | Que a mudança é pequena e que o `buildId` vai mudar com o novo build |
 | 4 | 5:00 | Terminal: `git add -A; git commit -m "chore: versão 1.1.0-sprint4 da API"; git push origin master` | Commit direto na branch monitorada |
 | 5 | 5:30 | Azure DevOps → Pipelines: execução surge sozinha (*Individual CI*, branch master, commit certo) | O disparo é automático via GitHub App; ninguém clicou em *Run* |
-| 6 | 6:00 | Abrir a execução: expandir cada step do CI em andamento | Checkout, cache, `mvn verify` (testes unitários/integração e Testcontainers/PostgreSQL), cópia do `app.jar`, publicação do artefato |
+| 6 | 6:00 | Abrir a execução: expandir cada step do CI em andamento | Checkout, cache, `mvn verify` (testes de integração com H2; 1 teste de Testcontainers é ignorado por falta de Docker no agente), cópia do `app.jar`, publicação do artefato |
 | 7 | 8:00 | Aba **Tests** (total/aprovados, inclusive `PetCrudPersistenciaIntegrationTest`) e aba **Artifacts** (`petfamily-jar`: `app.jar`, `build-info.txt`) | Falha em teste/build interrompe o pipeline e o CD não roda; o artefato é o mesmo que será implantado |
 | 8 | 9:00 | Estágio CD iniciando sozinho: logs do `AzureWebApp@1` e do *Smoke test* | Baixa o artefato da mesma execução; deploy; verificação de `health` e do `buildId` |
 | 9 | 10:30 | Portal Azure: Resource Group → Web App (*Overview*, *Deployment Center*/*Log stream*), PostgreSQL Flexible Server | Recursos reais criados; banco em nuvem separado do Web App (sem mostrar segredos) |

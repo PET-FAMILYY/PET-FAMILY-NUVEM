@@ -46,7 +46,7 @@ Fonte editável: [`docs/sprint4/arquitetura-cicd.svg`](docs/sprint4/arquitetura-
 - Demonstração do CRUD: [`docs/sprint4/crud-demo.ps1`](docs/sprint4/crud-demo.ps1) + SELECTs reais em [`docs/sprint4/evidencias-crud.sql`](docs/sprint4/evidencias-crud.sql)
 - PDF final (somente integrantes e links): [`docs/sprint4/pdf/gerar-pdf.ps1`](docs/sprint4/pdf/gerar-pdf.ps1) (recusa gerar com dados faltando)
 
-**Testes (local e CI):** `mvn verify` — 28 testes (23 de fluxos de negócio, 3 de CRUD/persistência de pets com SELECT direto na tabela, 1 contexto, 1 migrations V1–V7 em PostgreSQL real via Testcontainers; este último só roda com Docker, ou seja, no agente `ubuntu-latest` do CI).
+**Testes (local e CI):** `mvn verify` — 28 testes (23 de fluxos de negócio, 3 de CRUD/persistência de pets com SELECT direto na tabela, 1 contexto, 1 `PostgresMigrationTest` com Testcontainers). Esse último só executa quando o Docker está acessível; no agente atual do Azure Pipelines ele é **ignorado** (27 passam, 1 ignorado). As migrations V1–V7 foram validadas no PostgreSQL real do Azure (`flyway_schema_history`, todas com sucesso).
 
 **Execução local:** `mvn spring-boot:run` (H2, `http://localhost:9090/swagger-ui/index.html`) ou Docker Compose com PostgreSQL (seção "Como Rodar"). Variáveis do perfil `prod`: `DB_URL` (ou `DB_HOST`/`DB_PORT`/`DB_NAME`), `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ALLOWED_ORIGINS`, `SWAGGER_ENABLED`.
 
@@ -406,7 +406,7 @@ O schema é 100% gerenciado pelo Flyway (`src/main/resources/db/migration`). O H
 - Em desenvolvimento e testes não há banco externo: só o H2 local/em memória.
 - **Banco em nuvem (Sprint 4):** **Azure Database for PostgreSQL – Flexible Server 16** (perfil `prod`, `DB_URL` com `sslmode=require`), com o schema criado pelo Flyway na subida (V1–V7). O firewall libera apenas os IPs de saída do Web App e o IP de quem consulta o banco.
 - **Docker Compose e Render:** também **PostgreSQL** (perfil `prod`). O `h2-console` não existe em produção.
-- **Teste de migrations em PostgreSQL real:** `PostgresMigrationTest` (Testcontainers) executa as 7 migrations; é ignorado automaticamente se não houver Docker e roda no CI.
+- **Teste de migrations em PostgreSQL real:** `PostgresMigrationTest` (Testcontainers) executa as 7 migrations; é ignorado automaticamente se não houver Docker (é o caso do agente atual do CI). A validação em PostgreSQL real foi feita no Azure, onde o Flyway aplicou V1–V7 com sucesso.
 
 ### Dados de demonstração
 
@@ -579,7 +579,7 @@ mvn test
 ```
 Inclui testes de contexto (Flyway + Security) e testes de integração de ponta a ponta (`FluxosDeNegocioIntegrationTest`) cobrindo login, isolamento entre tutores, agendamento/conflito/cancelamento/atendimento e conclusão/recorrência de cuidados — ver seção "Testes" abaixo.
 
-> A suíte tem 28 testes: contexto, integração de ponta a ponta, CRUD de pets com conferência por SELECT e o `PostgresMigrationTest` (Testcontainers, ignorado se não houver Docker; roda no agente do CI).
+> A suíte tem 28 testes: contexto, integração de ponta a ponta, CRUD de pets com conferência por SELECT e o `PostgresMigrationTest` (Testcontainers, ignorado se não houver Docker, o que ocorre no agente atual do CI).
 
 ### Via Docker Compose (PostgreSQL, igual à produção)
 Pré-requisito: Docker.

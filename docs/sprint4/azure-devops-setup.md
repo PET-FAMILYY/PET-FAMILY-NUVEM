@@ -12,7 +12,7 @@ O exemplo Pricewhisper (.NET/Oracle, com estágio de infraestrutura) não se apl
 | Aproveitado do exemplo | Adaptado para este projeto |
 |---|---|
 | Estrutura `stages: CI → CD`, `deployment` com `environment`, artefato do pipeline consumido pelo deploy | Trigger em `master` **e** `main` (o exemplo usa só `Main`) |
-| `JavaToolInstaller@0` + `Maven@4` (JDK 17) + `PublishPipelineArtifact@1` | `mvn verify` (testes reais, inclusive Testcontainers), artefato `app.jar` + `build-info.txt`, `-Dbuild.id` |
+| `JavaToolInstaller@0` + `Maven@4` (JDK 17) + `PublishPipelineArtifact@1` | `mvn verify` (testes reais; o de Testcontainers é ignorado se o agente não tiver Docker), artefato `app.jar` + `build-info.txt`, `-Dbuild.id` |
 | `AzureWebApp@1` com `webAppLinux` + `zipDeploy`, runtime `JAVA:17-java17`, região `brazilsouth` | Nomes próprios (`petfamily-sprint4-api`, `sc-azure-sprint4`), smoke test do `buildId` |
 | Segredos do banco fora do repositório | Banco **PostgreSQL** em nuvem (o exemplo usa Oracle FIAP); App Settings `DB_URL`/`DB_USER`/`DB_PASSWORD`/`JWT_SECRET` definidos por `provision.ps1` a partir de variável de ambiente (o `criar-infra.sh` do exemplo tem usuário/senha dentro do arquivo) |
 
