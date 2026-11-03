@@ -39,6 +39,11 @@ stages:
                 maven | "$(Agent.OS)"
               path: $(MAVEN_CACHE_FOLDER)
 
+          - script: |
+              echo "api.version=1.44" > ~/.docker-java.properties
+              docker version || true
+            displayName: 'Preparar Docker para o Testcontainers'
+
           - task: Maven@4
             displayName: 'mvn verify (compila + testes + JAR)'
             inputs:
