@@ -1,37 +1,25 @@
-# Pipeline único com dois estágios: CI (Build) -> CD (Deploy).
-# O CD só inicia se o CI terminar com sucesso e consome o artefato publicado
-# PELA MESMA execução, então o que foi testado é exatamente o que vai para o Azure.
-#
-# Pré-requisitos fora do YAML: ver docs/sprint4/azure-devops-setup.md
-#   - Service connection ARM chamada como em azureServiceConnection
-#   - Web App criado por infra/azure/provision.ps1 com o nome de webAppName
-
 trigger:
   branches:
     include:
-      - master   # branch exigida pela avaliação
-      - main     # branch padrão atual do repositório no GitHub
-  # Sem "paths": qualquer alteração na master/main dispara o CI.
+      - master
+      - main
 
 pr: none
 
 variables:
-  # --- Ajuste estes dois valores se os nomes reais forem diferentes ---
-  azureServiceConnection: 'sc-azure-sprint4'   # Project Settings > Service connections
-  webAppName: 'petfamily-sprint4-api'          # mesmo valor de -WebAppName em provision.ps1
-  # -------------------------------------------------------------------
+  azureServiceConnection: 'sc-azure-sprint4'
+  webAppName: 'petfamily-sprint4-api'
   artifactName: 'petfamily-jar'
   MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
 
 stages:
-  # ============================ CI ============================
   - stage: CI
     displayName: 'CI - Build e testes'
     jobs:
       - job: Build
         displayName: 'Compilar, testar e publicar artefato'
         pool:
-          vmImage: 'ubuntu-latest'   # traz Docker, necessário ao PostgresMigrationTest (Testcontainers)
+          vmImage: 'ubuntu-latest'
         steps:
           - checkout: self
             displayName: 'Checkout do GitHub'
@@ -51,9 +39,6 @@ stages:
                 maven | "$(Agent.OS)"
               path: $(MAVEN_CACHE_FOLDER)
 
-          # JDK 17 (mesma versão do pom.xml e do Dockerfile). 'verify' restaura as
-          # dependências, compila, roda os testes e empacota o JAR; se algo falhar,
-          # o estágio falha e o CD não executa.
           - task: Maven@4
             displayName: 'mvn verify (compila + testes + JAR)'
             inputs:
@@ -88,7 +73,6 @@ stages:
               artifact: '$(artifactName)'
               publishLocation: 'pipeline'
 
-  # ============================ CD ============================
   - stage: CD
     displayName: 'CD - Deploy no Azure Web App'
     dependsOn: CI
@@ -98,14 +82,11 @@ stages:
         displayName: 'Deploy do artefato validado'
         pool:
           vmImage: 'ubuntu-latest'
-        # Ambiente sem aprovações/checks: o deploy é automático.
         environment: 'petfamily-sprint4'
         strategy:
           runOnce:
             deploy:
               steps:
-                # O job de deployment baixa automaticamente os artefatos da execução
-                # atual em $(Pipeline.Workspace)/<nome-do-artefato>.
                 - task: AzureWebApp@1
                   name: webAppDeploy
                   displayName: 'Deploy do app.jar no Azure Web App'
@@ -114,22 +95,22 @@ stages:
                     appType: 'webAppLinux'
                     appName: '$(webAppName)'
                     package: '$(Pipeline.Workspace)/$(artifactName)/app.jar'
-                    deploymentMethod: 'zipDeploy'   # mesmo método do exemplo do professor (Playmix)
+                    deploymentMethod: 'zipDeploy'
 
-                # Prova que a versão publicada é a deste build: /actuator/info expõe
-                # o buildId gravado pelo Maven (-Dbuild.id=$(Build.BuildNumber)).
                 - script: |
                     URL="$(webAppDeploy.AppServiceApplicationUrl)"
                     echo "URL publicada: $URL"
-                    for i in $(seq 1 30); do
+                    for i in $(seq 1 45); do
                       CODE=$(curl -s -o /dev/null -w '%{http_code}' "$URL/actuator/health" || true)
+                      INFO=$(curl -s "$URL/actuator/info" || true)
                       echo "tentativa $i: health HTTP $CODE"
-                      [ "$CODE" = "200" ] && break
+                      if [ "$CODE" = "200" ] && echo "$INFO" | grep -qF "$(Build.BuildNumber)"; then
+                        echo "OK: versão publicada = $(Build.BuildNumber)"
+                        echo "info: $INFO"
+                        exit 0
+                      fi
                       sleep 10
                     done
-                    [ "$CODE" = "200" ] || { echo "Aplicação não ficou saudável"; exit 1; }
-                    INFO=$(curl -s "$URL/actuator/info")
-                    echo "info: $INFO"
-                    echo "$INFO" | grep -q '$(Build.BuildNumber)' \
-                      || { echo "buildId publicado difere de $(Build.BuildNumber)"; exit 1; }
+                    echo "Aplicação não ficou saudável com a versão $(Build.BuildNumber). Último info: $INFO"
+                    exit 1
                   displayName: 'Smoke test (health + versão do build)'

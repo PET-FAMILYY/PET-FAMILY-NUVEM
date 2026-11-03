@@ -1,14 +1,4 @@
-﻿<#
-.SYNOPSIS
-  Gera o PDF final da Sprint 4: SOMENTE integrantes (nome completo, RM, turma) e os três links.
-
-.DESCRIPTION
-  1. Copie dados-entrega.example.json para dados-entrega.json (ignorado pelo git) e preencha com dados reais.
-  2. Rode ./gerar-pdf.ps1  -> gera entrega-sprint4.pdf (usa o Microsoft Edge em modo headless).
-  O script RECUSA gerar o PDF final se houver campo vazio ou placeholder (<...>).
-  Com -Modelo gera "modelo-NAO-ENTREGAR.pdf" apenas para conferir o layout.
-#>
-param(
+﻿param(
   [string]$Dados = (Join-Path $PSScriptRoot 'dados-entrega.json'),
   [switch]$Modelo
 )
@@ -63,7 +53,6 @@ $saida = Join-Path $PSScriptRoot $nome
 $tmp = Join-Path ([IO.Path]::GetTempPath()) "sprint4-$([guid]::NewGuid()).html"
 [IO.File]::WriteAllText($tmp, $html, [Text.UTF8Encoding]::new($false))
 try {
-  # Start-Process: o Edge escreve ruído em stderr que o PS 5.1 trataria como erro com 'Stop'
   Start-Process -FilePath $edge -Wait -WindowStyle Hidden -ArgumentList @(
     '--headless=new', '--disable-gpu', '--no-pdf-header-footer',
     "--print-to-pdf=`"$saida`"", "`"file:///$($tmp -replace '\\','/')`"")

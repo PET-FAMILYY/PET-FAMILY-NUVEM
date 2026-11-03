@@ -22,8 +22,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     Page<Consulta> findByPetTutorIdAndStatus(Long tutorId, StatusConsulta status, Pageable pageable);
 
-    // Agenda clínica: apenas AGENDADAS de hoje em diante (antes trazia também
-    // REALIZADAS e CANCELADAS). A ordenação vem do Pageable (data, horario).
     Page<Consulta> findByStatusAndDataGreaterThanEqual(StatusConsulta status, LocalDate data, Pageable pageable);
 
     long countByPetId(Long petId);

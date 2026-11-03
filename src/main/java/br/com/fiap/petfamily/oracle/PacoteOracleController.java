@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Endpoints que executam as procedures/funções da package PKG_PETFAMILY_S4.
- * Só existem com SPRING_PROFILES_ACTIVE=oracle. Restritos ao VETERINARIO, pois as
- * procedures não aplicam a checagem de posse (tutor x pet) que os services JPA aplicam.
- */
 @RestController
 @RequestMapping("/oracle")
 @Profile("oracle")

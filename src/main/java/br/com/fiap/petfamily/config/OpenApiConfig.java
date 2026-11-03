@@ -17,7 +17,6 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         final String esquemaBearer = "bearerAuth";
         return new OpenAPI()
-                // Habilita o botão "Authorize" do Swagger para testar rotas protegidas
                 .components(new Components().addSecuritySchemes(esquemaBearer,
                         new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)

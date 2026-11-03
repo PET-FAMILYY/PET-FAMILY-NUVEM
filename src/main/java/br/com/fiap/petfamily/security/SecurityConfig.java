@@ -41,8 +41,6 @@ public class SecurityConfig {
     @Value("${cors.allowed-origins}")
     private String corsAllowedOrigins;
 
-    // Só é true no perfil "dev" (application-dev.properties). Em prod/test a
-    // rota /h2-console NÃO é liberada: cai em anyRequest().authenticated().
     @Value("${spring.h2.console.enabled:false}")
     private boolean h2ConsoleHabilitado;
 
@@ -101,9 +99,7 @@ public class SecurityConfig {
                                         "Acesso negado", "Você não tem permissão para executar esta ação.", request.getRequestURI()))
                 )
                 .authorizeHttpRequests(auth -> {
-                    // AntPathRequestMatcher evita a ambiguidade MVC x servlet do H2 Console
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/health/**")).permitAll();
-                    // /actuator/info só expõe versão e id do build; o smoke test do CD (azure-pipelines.yml) o consulta
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/info")).permitAll();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/auth/login"),
                             AntPathRequestMatcher.antMatcher("/auth/registrar")).permitAll();
@@ -115,8 +111,6 @@ public class SecurityConfig {
                     }
                     auth.anyRequest().authenticated();
                 })
-                // frameOptions(sameOrigin) só é necessário para o H2 Console (usa <frame>);
-                // com ele desligado mantém o padrão seguro (DENY).
                 .headers(headers -> {
                     if (h2ConsoleHabilitado) {
                         headers.frameOptions(frame -> frame.sameOrigin());

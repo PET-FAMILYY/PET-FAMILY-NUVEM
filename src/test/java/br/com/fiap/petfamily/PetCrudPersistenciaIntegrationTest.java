@@ -21,10 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * CRUD completo de Pet pela API, conferindo cada etapa com SELECT direto na tabela
- * (mesma verificação que o vídeo da Sprint 4 faz no banco em nuvem).
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -54,7 +50,6 @@ class PetCrudPersistenciaIntegrationTest {
                 .andReturn();
         String auth = "Bearer " + json(registro).get("token").asText();
 
-        // CREATE
         MvcResult criado = mockMvc.perform(post("/pets")
                         .header("Authorization", auth)
                         .contentType("application/json")
@@ -68,7 +63,6 @@ class PetCrudPersistenciaIntegrationTest {
         List<String> nomes = jdbc.queryForList("SELECT nome FROM pets WHERE id = ?", String.class, id);
         assertEquals(List.of("DEMO-Sprint4-Rex"), nomes);
 
-        // READ
         mockMvc.perform(get("/pets/{id}", id).header("Authorization", auth))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("DEMO-Sprint4-Rex"))
@@ -77,7 +71,6 @@ class PetCrudPersistenciaIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[?(@.id == %d)]".formatted(id)).exists());
 
-        // UPDATE
         mockMvc.perform(put("/pets/{id}", id)
                         .header("Authorization", auth)
                         .contentType("application/json")
@@ -92,7 +85,6 @@ class PetCrudPersistenciaIntegrationTest {
         assertEquals("Labrador",
                 jdbc.queryForObject("SELECT raca FROM pets WHERE id = ?", String.class, id));
 
-        // DELETE
         mockMvc.perform(delete("/pets/{id}", id).header("Authorization", auth))
                 .andExpect(status().isNoContent());
 

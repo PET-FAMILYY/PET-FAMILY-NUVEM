@@ -19,7 +19,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <!-- Identificador do build exposto em /actuator/info; o pipeline passa -Dbuild.id=$(Build.BuildNumber) -->
         <build.id>local</build.id>
     </properties>
 

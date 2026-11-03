@@ -1,26 +1,7 @@
-﻿<#
-.SYNOPSIS
-  Cria o projeto Azure DevOps da Sprint 4 e concede acesso ao professor.
-
-.DESCRIPTION
-  Pré-requisitos: Azure CLI + extensão azure-devops, e `az login` com uma conta
-  que administre a organização (ou `az devops login` com PAT digitado no prompt;
-  nunca cole o token em arquivos ou no chat).
-
-  ACESSO DO PROFESSOR - dois níveis distintos:
-    * Nível de acesso (license) = Basic -> o que a pessoa pode usar na organização (Repos, Pipelines, Boards...).
-    * Permissões no projeto = grupo "Readers" -> o que ela pode ver/fazer dentro DESTE projeto.
-  O script concede os dois. O convite por e-mail só é enviado com -EnviarConvite.
-
-.EXAMPLE
-  ./infra/azure/devops-setup.ps1 -Organization minha-org -NomeProfessor 'Fulano' `
-     -Integrantes '566551 - Pedro Vaz Ferreira - <TURMA>','565139 - ...' `
-     -EmailProfessor professor@exemplo.com -EnviarConvite
-#>
-param(
-  [Parameter(Mandatory)][string]$Organization,   # https://dev.azure.com/<Organization>
+﻿param(
+  [Parameter(Mandatory)][string]$Organization,
   [Parameter(Mandatory)][string]$NomeProfessor,
-  [Parameter(Mandatory)][string[]]$Integrantes,  # "<RM> - <nome completo> - <turma>"
+  [Parameter(Mandatory)][string[]]$Integrantes,
   [string]$EmailProfessor = '',
   [switch]$EnviarConvite
 )
@@ -28,7 +9,7 @@ param(
 $ErrorActionPreference = 'Stop'
 function Invoke-Az { & az @args; if ($LASTEXITCODE -ne 0) { throw "az $($args[0..2] -join ' ') falhou (exit $LASTEXITCODE)" } }
 
-$projectName = "Sprint 4 $([char]0x2013) Azure DevOps"      # "Sprint 4 – Azure DevOps"
+$projectName = "Sprint 4 $([char]0x2013) Azure DevOps"
 $description = "Projeto para entrega da Sprint 4 do professor $NomeProfessor`n" + ($Integrantes -join "`n")
 $orgUrl = "https://dev.azure.com/$Organization"
 

@@ -4,7 +4,6 @@ import org.springframework.cache.annotation.CacheEvict;
 
 import java.lang.annotation.*;
 
-/** Invalida os caches de leitura após qualquer escrita de negócio. */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

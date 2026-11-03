@@ -188,10 +188,6 @@ class FluxosDeNegocioIntegrationTest {
                 .andExpect(jsonPath("$[?(@.dataLembrete == '2030-01-31')]").exists());
     }
 
-    // ------------------------------------------------------------------
-    // Testes adicionados na correção pós-avaliação
-    // ------------------------------------------------------------------
-
     @Test
     void todasAsMigrationsForamAplicadasSemPendencias() {
         assertTrue(flyway.info().applied().length >= 6, "esperado V1..V6 aplicadas");

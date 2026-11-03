@@ -51,7 +51,6 @@ public class ConsultaService {
         Pet pet = petService.findById(request.getPetId());
         securityUtils.exigirTutorDono(pet.getTutor().getId(), "O pet informado não pertence ao tutor autenticado.");
 
-        // Normaliza para minutos: 10:00:00 e 10:00:30 não podem virar "dois horários".
         LocalTime horario = request.getHorario().truncatedTo(ChronoUnit.MINUTES);
 
         LocalDateTime momentoAgendado = LocalDateTime.of(request.getData(), horario);
@@ -59,8 +58,6 @@ public class ConsultaService {
             throw new OperacaoInvalidaException("A consulta deve ser marcada para uma data e horário futuros.");
         }
 
-        // Checagem antecipada (mensagem clara, sem depender da exceção do banco).
-        // A UNIQUE(data, horario) continua sendo a garantia final contra concorrência.
         if (consultaSlotRepository.existsByDataAndHorario(request.getData(), horario)) {
             throw conflitoDeHorario(request.getData(), horario);
         }

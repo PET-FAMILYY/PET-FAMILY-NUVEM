@@ -27,10 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * Chama as funções e procedures da package PKG_PETFAMILY_S4 via CallableStatement,
- * no MESMO DataSource usado pelo JPA. Só existe no perfil "oracle".
- */
 @Service
 @Profile("oracle")
 public class PacoteOracleService {
@@ -47,8 +43,6 @@ public class PacoteOracleService {
         this.jdbc = jdbc;
         this.diretorioExportacao = Path.of(diretorioExportacao);
     }
-
-    // ---------- Procedures de escrita ----------
 
     @Transactional
     @InvalidaCaches
@@ -109,8 +103,6 @@ public class PacoteOracleService {
         }));
     }
 
-    // ---------- Funções ----------
-
     @Transactional(readOnly = true)
     public long contarPets(Long tutorId) {
         return executar("fn_contar_pets", () -> jdbc.execute((java.sql.Connection con) -> {
@@ -135,9 +127,6 @@ public class PacoteOracleService {
         }));
     }
 
-    // ---------- Exportação JSON ----------
-
-    /** Chama pr_exportar_json e devolve o JSON (CLOB lido dentro da mesma conexão). */
     @Transactional(readOnly = true)
     public String exportarJson(String colecao) {
         String nome = colecao == null ? "" : colecao.trim().toUpperCase(Locale.ROOT);
@@ -167,7 +156,6 @@ public class PacoteOracleService {
         }));
     }
 
-    /** Exporta a coleção e grava json/<colecao>.json (nome esperado por mongodb/02_importar.js). */
     public ExportacaoResponse exportarParaArquivo(String colecao) {
         String json = exportarJson(colecao);
         String arquivo = colecao.trim().toLowerCase(Locale.ROOT) + ".json";
@@ -183,8 +171,6 @@ public class PacoteOracleService {
         }
     }
 
-    // ---------- Tradução dos erros ORA-20xxx da package ----------
-
     private <T> T executar(String rotina, java.util.function.Supplier<T> chamada) {
         try {
             return chamada.get();
@@ -193,7 +179,6 @@ public class PacoteOracleService {
         }
     }
 
-    /** ORA-20004 -> 404, ORA-20006 e ORA-20009 -> 409, demais ORA-20xxx -> 400. */
     private RuntimeException traduzir(String rotina, DataAccessException ex) {
         Throwable causa = ex.getMostSpecificCause();
         if (causa instanceof SQLException sql && sql.getErrorCode() >= 20000 && sql.getErrorCode() <= 20999) {
@@ -208,7 +193,6 @@ public class PacoteOracleService {
         return ex;
     }
 
-    /** "ORA-20004: Tutor nao encontrado.\nORA-06512: ..." -> "Tutor nao encontrado." */
     static String extrairMensagem(String bruta) {
         if (bruta == null) {
             return "Erro ao executar rotina do banco.";

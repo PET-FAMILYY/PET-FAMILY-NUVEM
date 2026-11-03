@@ -1,21 +1,7 @@
-﻿<#
-.SYNOPSIS
-  Demonstração do CRUD de Pets para o vídeo da Sprint 4.
-
-.DESCRIPTION
-  Cria um tutor e um pet DE DEMONSTRAÇÃO (prefixo "DEMO"), faz CREATE/READ/UPDATE/DELETE
-  pela API e PAUSA após cada etapa para você rodar o SELECT correspondente no banco
-  (docs/sprint4/evidencias-crud.sql). Não toca em dados que não tenha criado.
-
-  Segredos: a senha do tutor de demonstração é gerada aleatoriamente e nunca é impressa.
-
-.EXAMPLE
-  ./docs/sprint4/crud-demo.ps1 -BaseUrl https://petfamily-sprint4-api.azurewebsites.net -Pausar
-#>
-param(
+﻿param(
   [Parameter(Mandatory)][string]$BaseUrl,
-  [switch]$Pausar,        # espera ENTER entre as etapas (use na gravação)
-  [switch]$ManterTutor    # não exclui o tutor de demonstração no final
+  [switch]$Pausar,
+  [switch]$ManterTutor
 )
 
 $ErrorActionPreference = 'Stop'

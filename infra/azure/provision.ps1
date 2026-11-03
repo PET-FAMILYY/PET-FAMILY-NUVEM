@@ -1,45 +1,23 @@
-﻿<#
-.SYNOPSIS
-  Provisiona no Azure: Resource Group, PostgreSQL Flexible Server (banco em nuvem),
-  App Service Plan Linux e Web App Java SE 17 já configurado para a Pet Family API.
-
-.DESCRIPTION
-  GERA CUSTO (Web App B1 + PostgreSQL Burstable B1ms). Execute somente com
-  autorização. Pré-requisito: Azure CLI (az) e `az login` na assinatura correta.
-
-  Segredos NÃO ficam neste arquivo:
-    $env:PETFAMILY_DB_PASSWORD  (obrigatório, mínimo 12 caracteres, você escolhe)
-    $env:PETFAMILY_JWT_SECRET   (opcional; se ausente, é gerado aleatoriamente)
-  Os valores vão direto para os App Settings do Web App; nada é impresso.
-
-  Acesso ao banco: sem "Allow all Azure services" e sem 0.0.0.0-255.255.255.255.
-  Só os IPs de saída do Web App e (opcionalmente) o seu IP, para rodar os SELECTs.
-
-.EXAMPLE
-  $env:PETFAMILY_DB_PASSWORD = Read-Host -AsSecureString | ConvertFrom-SecureString -AsPlainText   # PS 7
-  ./infra/azure/provision.ps1 -ClientIp 203.0.113.10
-#>
-param(
+﻿param(
   [string]$ResourceGroup = 'rg-petfamily-sprint4',
-  [string]$Location      = 'brazilsouth',          # ajuste se a assinatura (ex.: Azure for Students) restringir regiões
-  [string]$WebAppName    = 'petfamily-sprint4-api', # globalmente único; manter igual a webAppName no azure-pipelines.yml
+  [string]$Location      = 'brazilsouth',
+  [string]$WebAppName    = 'petfamily-sprint4-api',
   [string]$PlanName      = 'plan-petfamily-sprint4',
   [string]$PlanSku       = 'B1',
-  [string]$PgServerName  = 'petfamily-sprint4-pg',  # globalmente único
+  [string]$PgServerName  = 'petfamily-sprint4-pg',
   [string]$DbName        = 'petfamily',
   [string]$DbAdminUser   = 'petfamilyadmin',
-  [string]$ClientIp      = ''                       # seu IP público, para psql/DBeaver na demonstração
+  [string]$ClientIp      = ''
 )
 
 $ErrorActionPreference = 'Stop'
 
 function Invoke-Az {
-  # 'Continue' localmente: avisos do az em stderr não podem virar exceção; vale o código de saída
   $ErrorActionPreference = 'Continue'
   & az @args
   if ($LASTEXITCODE -ne 0) { throw "az $($args[0..2] -join ' ') falhou (exit $LASTEXITCODE)" }
 }
-function Test-Az {   # $true se o comando az retorna sucesso (recurso existe)
+function Test-Az {
   $ErrorActionPreference = 'Continue'
   & az @args -o none 2>$null
   return ($LASTEXITCODE -eq 0)
@@ -59,12 +37,11 @@ if ([string]::IsNullOrEmpty($jwtSecret)) {
 
 Write-Host "Assinatura ativa:"; Invoke-Az account show --query '{nome:name, id:id}' -o table
 
-# Runtime Java 17 aceito pela versão instalada do CLI (o separador mudou entre versões: ':' ou '|')
 $runtime = (& az webapp list-runtimes --os-type linux -o tsv) |
   ForEach-Object { ($_ -split "`t")[0] } |
   Where-Object { $_ -match '^JAVA[:|]17-java17$' } | Select-Object -First 1
 if (-not $runtime) { throw "Runtime JAVA 17 não encontrado em 'az webapp list-runtimes --os-type linux'." }
-$runtime = $runtime -replace '\|', ':'   # 'JAVA:17-java17'; o '|' seria lido como pipe pelo cmd (az é .bat no Windows)
+$runtime = $runtime -replace '\|', ':'
 
 Write-Host "0/6 Providers (necessário em assinaturas novas/estudante)"
 foreach ($ns in 'Microsoft.Web', 'Microsoft.DBforPostgreSQL') { Invoke-Az provider register --namespace $ns --wait -o none }
@@ -95,7 +72,7 @@ if (-not (Test-Az webapp show -g $ResourceGroup -n $WebAppName)) {
 Invoke-Az webapp update -g $ResourceGroup -n $WebAppName --https-only true -o none
 Invoke-Az webapp config set -g $ResourceGroup -n $WebAppName `
   --startup-file 'java -jar /home/site/wwwroot/app.jar --server.port=80' -o none
-if ($PlanSku -notin 'F1', 'FREE', 'D1') {   # planos gratuitos não suportam Always On
+if ($PlanSku -notin 'F1', 'FREE', 'D1') {
   Invoke-Az webapp config set -g $ResourceGroup -n $WebAppName --always-on true -o none
 }
 

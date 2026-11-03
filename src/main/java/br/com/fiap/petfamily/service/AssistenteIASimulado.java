@@ -6,11 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Locale;
 
-/** Assistente simulado: casa palavras-chave da pergunta com um modelo de resposta. */
 @Component
 public class AssistenteIASimulado {
 
-    // %1$s = nome do pet, %2$s = espécie
     private record Regra(List<String> palavras, String modelo) {}
 
     private static final List<Regra> REGRAS = List.of(

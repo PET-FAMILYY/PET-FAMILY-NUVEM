@@ -117,7 +117,6 @@ public class PetService {
     }
 
     private PetResponse toResponse(Pet pet) {
-        // COUNT no banco: antes carregava TODAS as consultas/lembretes do pet só para contar.
         long lembretesPendentes = lembreteRepository.countByPetIdAndStatus(pet.getId(), StatusLembrete.PENDENTE);
         long totalConsultas = consultaRepository.countByPetId(pet.getId());
         return PetResponse.builder()

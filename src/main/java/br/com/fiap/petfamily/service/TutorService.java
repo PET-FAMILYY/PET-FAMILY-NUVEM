@@ -63,7 +63,6 @@ public class TutorService {
 
         String novoEmail = request.getEmail().trim().toLowerCase();
         boolean mudouEmail = !novoEmail.equalsIgnoreCase(tutor.getEmail());
-        // Confere TAMBÉM a tabela de usuários (o e-mail é o login e também é único lá).
         if (mudouEmail && (tutorRepository.existsByEmail(novoEmail)
                 || usuarioRepository.existsByEmailIgnoreCase(novoEmail))) {
             throw new EmailJaCadastradoException(novoEmail);
@@ -74,8 +73,6 @@ public class TutorService {
         tutor.setTelefone(request.getTelefone());
         Tutor salvo = tutorRepository.save(tutor);
 
-        // BUG corrigido: antes buscava o usuário pelo e-mail NOVO (que ainda não existia),
-        // então o login nunca era atualizado. Agora busca pelo vínculo tutor_id.
         usuarioRepository.findByTutorId(id).ifPresent(usuario -> {
             usuario.setNome(request.getNome());
             usuario.setEmail(novoEmail);
@@ -91,7 +88,6 @@ public class TutorService {
         securityUtils.exigirTutorDono(id, "Você só pode acessar o próprio cadastro de tutor.");
         Tutor tutor = findById(id);
 
-        // Remove o login vinculado ANTES do tutor, para o token deixar de valer.
         usuarioRepository.findByTutorId(id).ifPresent(usuarioRepository::delete);
 
         tutorRepository.delete(tutor);

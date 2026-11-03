@@ -105,9 +105,6 @@ public class LembreteService {
         String descricao = lembrete.getDescricao();
         String tipo = lembrete.getTipo();
         Integer recorrenciaDias = lembrete.getRecorrenciaDias();
-        // Recorrência ancorada em HOJE quando o cuidado estava atrasado; do contrário
-        // a "próxima" ocorrência já nasceria vencida (ex.: vacina de 90 dias, feita
-        // com 100 dias de atraso, geraria outra já atrasada).
         LocalDate hoje = LocalDate.now();
         LocalDate proximaData = lembrete.getDataLembrete().isBefore(hoje) ? hoje : lembrete.getDataLembrete();
         Usuario criadoPor = lembrete.getCriadoPor();

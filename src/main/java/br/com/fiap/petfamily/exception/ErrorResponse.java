@@ -17,7 +17,6 @@ public class ErrorResponse {
     private String error;
     private String message;
     private String path;
-    /** Erros de validação por campo (só preenchido em 400 de Bean Validation). */
     private Map<String, String> campos;
 
     public static ErrorResponse of(HttpStatus status, String error, String message, String path) {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
-/** Bloqueia o e-mail por 15 min após 5 falhas seguidas (em memória; ver nota sobre múltiplas instâncias). */
 @Service
 public class LoginAttemptService {
 

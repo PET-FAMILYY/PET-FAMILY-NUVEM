@@ -74,7 +74,6 @@ public class GlobalExceptionHandler {
                 "Método " + ex.getMethod() + " não é suportado para " + req.getRequestURI() + ".", req);
     }
 
-    // JSON malformado, data/horário inválido, enum desconhecido: erro do cliente => 400
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMensagemIlegivel(HttpMessageNotReadableException ex, HttpServletRequest req) {
         return resposta(HttpStatus.BAD_REQUEST, "Bad Request",
@@ -111,7 +110,6 @@ public class GlobalExceptionHandler {
                 "Ocorreu um erro inesperado. Tente novamente mais tarde.", req);
     }
 
-    /** Único ponto que monta a resposta de erro — evita repetir o builder em cada handler. */
     private ResponseEntity<ErrorResponse> resposta(HttpStatus status, String titulo, String mensagem,
                                                    HttpServletRequest req) {
         return ResponseEntity.status(status)

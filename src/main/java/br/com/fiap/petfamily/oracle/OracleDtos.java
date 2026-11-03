@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/** DTOs dos endpoints que chamam a package PKG_PETFAMILY_S4. */
 public final class OracleDtos {
 
     private OracleDtos() {}

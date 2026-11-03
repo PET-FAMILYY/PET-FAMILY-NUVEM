@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 } catch (UsernameNotFoundException ex) {
-                    SecurityContextHolder.clearContext();   // conta excluída => 401
+                    SecurityContextHolder.clearContext();
                 }
             }
         }

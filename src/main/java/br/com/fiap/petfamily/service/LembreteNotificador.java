@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-/** Todo dia às 08:00 avisa sobre cuidados que vencem em até 3 dias (canal simulado por log). */
 @Component
 @RequiredArgsConstructor
 @Slf4j
