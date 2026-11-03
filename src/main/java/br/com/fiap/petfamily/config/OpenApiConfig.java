@@ -25,7 +25,7 @@ public class OpenApiConfig {
                                 .description("Token obtido em POST /auth/login (informe só o token, sem 'Bearer ')")))
                 .addSecurityItem(new SecurityRequirement().addList(esquemaBearer))
                 .info(new Info()
-                        .title("Pet Family API")
+                        .title("Pet Family API - Sprint 04")
                         .description(
                                 "API RESTful para acompanhamento contínuo da saúde dos pets. " +
                                         "Desenvolvida como parte do Challenge CLYVO VET 2026 — FIAP.\n\n" +
@@ -37,7 +37,7 @@ public class OpenApiConfig {
                                         "- Assistente de IA simulada para saúde animal\n" +
                                         "- Dashboard com KPIs clínicos"
                         )
-                        .version("1.0.0")
+                        .version("1.1.2")
                         .contact(new Contact()
                                 .name("Pedro Vaz & João Victor")
                                 .email("pedrovazferreira10@gmail.com"))
