@@ -1,0 +1,8 @@
+{
+  "integrantes": [
+    { "nome": "<NOME COMPLETO>", "rm": "<RM>", "turma": "<TURMA>" }
+  ],
+  "linkGitHub": "<https://github.com/...>",
+  "linkVideoYouTube": "<https://youtu.be/...>",
+  "linkProjetoAzureDevOps": "<https://dev.azure.com/ORGANIZACAO/Sprint%204%20%E2%80%93%20Azure%20DevOps>"
+}

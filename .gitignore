@@ -1,0 +1,32 @@
+# Maven / Spring Boot
+target/
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Banco H2
+*.db
+*.mv.db
+
+data/
+.env
+.env.oracle
+.env.postgres
+# Sprint 4 - dados pessoais do PDF e PDFs gerados
+docs/sprint4/pdf/dados-entrega.json
+docs/sprint4/pdf/*.pdf
+
+# Segredos locais (mantém apenas os exemplos)
+.env.*
+!.env.example
+infra/azure/*.local*
+
+# Material de aula do professor (nao publicar)
+Modulo_19_Azure_Pipeline/

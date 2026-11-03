@@ -1,0 +1,325 @@
+{
+  "info": {
+    "name": "Pet Family API",
+    "description": "Coleção de endpoints da Pet Family API - Challenge CLYVO VET 2026",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Tutores",
+      "item": [
+        {
+          "name": "POST - Cadastrar Tutor",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/tutores", "host": ["{{baseUrl}}"], "path": ["tutores"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Carlos Souza\",\n  \"email\": \"carlos@email.com\",\n  \"telefone\": \"(11) 98765-4321\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET - Listar Tutores",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/tutores?page=0&size=10&sort=nome,asc", "host": ["{{baseUrl}}"], "path": ["tutores"], "query": [{"key": "page", "value": "0"}, {"key": "size", "value": "10"}, {"key": "sort", "value": "nome,asc"}]}
+          }
+        },
+        {
+          "name": "GET - Filtrar Tutor por Nome",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/tutores?nome=Pedro", "host": ["{{baseUrl}}"], "path": ["tutores"], "query": [{"key": "nome", "value": "Pedro"}]}
+          }
+        },
+        {
+          "name": "GET - Buscar Tutor por ID",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/tutores/1", "host": ["{{baseUrl}}"], "path": ["tutores", "1"]}
+          }
+        },
+        {
+          "name": "PUT - Atualizar Tutor",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/tutores/1", "host": ["{{baseUrl}}"], "path": ["tutores", "1"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Carlos Souza Jr.\",\n  \"email\": \"carlos.jr@email.com\",\n  \"telefone\": \"(11) 91234-5678\"\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE - Remover Tutor",
+          "request": {
+            "method": "DELETE",
+            "url": {"raw": "{{baseUrl}}/tutores/1", "host": ["{{baseUrl}}"], "path": ["tutores", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pets",
+      "item": [
+        {
+          "name": "POST - Cadastrar Pet",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/pets", "host": ["{{baseUrl}}"], "path": ["pets"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Rex\",\n  \"especie\": \"Cachorro\",\n  \"raca\": \"Labrador\",\n  \"idade\": 4,\n  \"peso\": 32.0,\n  \"observacoesSaude\": \"Castrado. Sem alergias.\",\n  \"tutorId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "GET - Listar Pets",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/pets?page=0&size=10&sort=nome,asc", "host": ["{{baseUrl}}"], "path": ["pets"], "query": [{"key": "page", "value": "0"}, {"key": "size", "value": "10"}, {"key": "sort", "value": "nome,asc"}]}
+          }
+        },
+        {
+          "name": "GET - Filtrar Pets por TutorId",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/pets?tutorId=1", "host": ["{{baseUrl}}"], "path": ["pets"], "query": [{"key": "tutorId", "value": "1"}]}
+          }
+        },
+        {
+          "name": "GET - Filtrar Pets por Espécie",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/pets?especie=Cachorro", "host": ["{{baseUrl}}"], "path": ["pets"], "query": [{"key": "especie", "value": "Cachorro"}]}
+          }
+        },
+        {
+          "name": "GET - Buscar Pet por ID",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/pets/1", "host": ["{{baseUrl}}"], "path": ["pets", "1"]}
+          }
+        },
+        {
+          "name": "PUT - Atualizar Pet",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/pets/1", "host": ["{{baseUrl}}"], "path": ["pets", "1"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Rex\",\n  \"especie\": \"Cachorro\",\n  \"raca\": \"Labrador\",\n  \"idade\": 5,\n  \"peso\": 33.5,\n  \"observacoesSaude\": \"Castrado. Alergia leve ao frio.\",\n  \"tutorId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE - Remover Pet",
+          "request": {
+            "method": "DELETE",
+            "url": {"raw": "{{baseUrl}}/pets/1", "host": ["{{baseUrl}}"], "path": ["pets", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultas",
+      "item": [
+        {
+          "name": "POST - Registrar Consulta",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/consultas", "host": ["{{baseUrl}}"], "path": ["consultas"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": \"2026-06-20\",\n  \"horario\": \"14:00\",\n  \"tipoConsulta\": \"Vacinação\",\n  \"status\": \"AGENDADA\",\n  \"observacoes\": \"V10 + antirrábica anual\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "GET - Listar Consultas",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/consultas?page=0&size=10&sort=data,asc", "host": ["{{baseUrl}}"], "path": ["consultas"]}
+          }
+        },
+        {
+          "name": "GET - Filtrar por Status AGENDADA",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/consultas?status=AGENDADA", "host": ["{{baseUrl}}"], "path": ["consultas"], "query": [{"key": "status", "value": "AGENDADA"}]}
+          }
+        },
+        {
+          "name": "GET - Consultas Futuras",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/consultas/futuras", "host": ["{{baseUrl}}"], "path": ["consultas", "futuras"]}
+          }
+        },
+        {
+          "name": "GET - Buscar Consulta por ID",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/consultas/1", "host": ["{{baseUrl}}"], "path": ["consultas", "1"]}
+          }
+        },
+        {
+          "name": "PUT - Atualizar Consulta",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/consultas/1", "host": ["{{baseUrl}}"], "path": ["consultas", "1"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": \"2026-06-20\",\n  \"horario\": \"15:30\",\n  \"tipoConsulta\": \"Vacinação\",\n  \"status\": \"REALIZADA\",\n  \"observacoes\": \"Consulta realizada com sucesso.\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE - Remover Consulta",
+          "request": {
+            "method": "DELETE",
+            "url": {"raw": "{{baseUrl}}/consultas/1", "host": ["{{baseUrl}}"], "path": ["consultas", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lembretes",
+      "item": [
+        {
+          "name": "POST - Criar Lembrete",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/lembretes", "host": ["{{baseUrl}}"], "path": ["lembretes"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Vermifugação Trimestral\",\n  \"descricao\": \"Aplicar vermífugo a cada 3 meses\",\n  \"dataLembrete\": \"2026-07-15\",\n  \"tipo\": \"Preventivo\",\n  \"status\": \"PENDENTE\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "GET - Listar Lembretes",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/lembretes?page=0&size=10&sort=dataLembrete,asc", "host": ["{{baseUrl}}"], "path": ["lembretes"]}
+          }
+        },
+        {
+          "name": "GET - Filtrar por Status PENDENTE",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/lembretes?status=PENDENTE", "host": ["{{baseUrl}}"], "path": ["lembretes"], "query": [{"key": "status", "value": "PENDENTE"}]}
+          }
+        },
+        {
+          "name": "GET - Lembretes Pendentes do Pet",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/lembretes/pet/1/pendentes", "host": ["{{baseUrl}}"], "path": ["lembretes", "pet", "1", "pendentes"]}
+          }
+        },
+        {
+          "name": "PUT - Concluir Lembrete",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/lembretes/1", "host": ["{{baseUrl}}"], "path": ["lembretes", "1"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Vermifugação Trimestral\",\n  \"descricao\": \"Aplicar vermífugo a cada 3 meses\",\n  \"dataLembrete\": \"2026-07-15\",\n  \"tipo\": \"Preventivo\",\n  \"status\": \"CONCLUIDO\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE - Remover Lembrete",
+          "request": {
+            "method": "DELETE",
+            "url": {"raw": "{{baseUrl}}/lembretes/1", "host": ["{{baseUrl}}"], "path": ["lembretes", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Interações IA",
+      "item": [
+        {
+          "name": "POST - Interação sobre Vacinação",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/interacoes-ia", "host": ["{{baseUrl}}"], "path": ["interacoes-ia"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pergunta\": \"Quais vacinas meu cachorro precisa tomar?\",\n  \"categoria\": \"Vacinação\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - Interação sobre Alimentação",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/interacoes-ia", "host": ["{{baseUrl}}"], "path": ["interacoes-ia"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pergunta\": \"Posso dar ração caseira para meu gato?\",\n  \"categoria\": \"Alimentação\",\n  \"petId\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - Interação sobre Sintomas",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "{{baseUrl}}/interacoes-ia", "host": ["{{baseUrl}}"], "path": ["interacoes-ia"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pergunta\": \"Meu pet está vomitando, o que devo fazer?\",\n  \"categoria\": \"Sintomas\",\n  \"petId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "GET - Listar Todas as Interações",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/interacoes-ia?page=0&size=10", "host": ["{{baseUrl}}"], "path": ["interacoes-ia"]}
+          }
+        },
+        {
+          "name": "GET - Histórico de Interações do Pet",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/interacoes-ia/pet/1", "host": ["{{baseUrl}}"], "path": ["interacoes-ia", "pet", "1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "GET - Resumo do Dashboard",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{baseUrl}}/dashboard/resumo", "host": ["{{baseUrl}}"], "path": ["dashboard", "resumo"]}
+          }
+        }
+      ]
+    }
+  ]
+}
