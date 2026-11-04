@@ -37,4 +37,4 @@ if ($EmailProfessor) {
 }
 
 Write-Host "Projeto criado: $orgUrl/$([uri]::EscapeDataString($projectName))"
-Write-Host 'Faltam (via portal): conexão com GitHub, Service Connection ARM e criação do pipeline - ver docs/sprint4/azure-devops-setup.md'
+Write-Host 'Faltam (via portal): conexão com GitHub, Service Connection ARM e criação do pipeline - ver o README'

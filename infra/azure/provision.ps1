@@ -105,5 +105,5 @@ if ($ClientIp) {
 Write-Host "6/6 Pronto."
 Write-Host "Web App   : https://$((& az webapp show -g $ResourceGroup -n $WebAppName --query defaultHostName -o tsv))"
 Write-Host "PostgreSQL: $pgHost (db: $DbName, usuário: $DbAdminUser)"
-Write-Host "Próximo passo: criar a Service Connection ARM e rodar o pipeline (docs/sprint4/azure-devops-setup.md)."
+Write-Host "Próximo passo: criar a Service Connection ARM e rodar o pipeline (ver o README)."
 Write-Host "Obs.: o schema é criado pelo Flyway no primeiro start da aplicação (V1-V7)."
